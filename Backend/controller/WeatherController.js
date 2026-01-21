@@ -40,13 +40,16 @@ exports.getCurrentWeather = async (req, res) => {
         };
             
         
-        await SearchHistory.create(
-            {
+       await SearchHistory.findOneAndUpdate(
+        { city: weatherData.city },
+        {
             city: weatherData.city,
             country: weatherData.country,
-            Temperature: weatherData.temperature,
-            WeatherCondition: weatherData.weatherCondition
-            }
+            temperature: weatherData.temperature,
+            weatherCondition: weatherData.weatherCondition,
+            searchedAt: new Date()
+        },
+        { upsert: true, new: true }
         );
 
         res.status(200).json(
